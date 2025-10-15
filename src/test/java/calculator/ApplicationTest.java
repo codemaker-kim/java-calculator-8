@@ -71,6 +71,85 @@ class ApplicationTest extends NsTest {
         });
     }
 
+    @Test
+    @DisplayName("금지된 커스텀 구분자 지정 시 예외를 발생시킨다.")
+    void bannedDelimiter() {
+        assertSimpleTest(() ->
+                assertThatThrownBy(() -> runException("//.\\n1,2:3.4"))
+                        .isInstanceOf(IllegalArgumentException.class)
+        );
+    }
+
+    @ParameterizedTest
+    @DisplayName("기존에 존재하는 구분자로 커스텀 구분자를 지정해도 정상적으로 결과를 출력한다.")
+    @CsvSource(
+            value = {
+                    "//:\\n1,2:3:4&결과 : 10",
+                    "//,\\n1,2:3:4&결과 : 10"
+            },
+            delimiter = '&'
+    )
+    void alreadyExistDelimiter(String input, String expected) {
+        assertSimpleTest(() -> {
+            run(input);
+            assertThat(output()).contains(expected);
+        });
+    }
+
+    @Test
+    @DisplayName("문자열에 구분자가 아닌 문자가 존재할 경우 예외 발생")
+    void invalidInput() {
+        assertSimpleTest(() ->
+                assertThatThrownBy(() -> runException("12,3:4=5"))
+                        .isInstanceOf(IllegalArgumentException.class)
+        );
+    }
+
+    @Test
+    @DisplayName("입력에 숫자 범위를 초과하는 값이 나오면 예외를 발생시킨다")
+    void inputOverflowNumber() {
+        assertSimpleTest(() ->
+                assertThatThrownBy(() -> runException("2147483648,1,2"))
+                        .isInstanceOf(IllegalArgumentException.class)
+        );
+    }
+
+    @Test
+    @DisplayName("커스텀 구분자 지정 양식은 있지만 구분자가 없으면 예외를 발생시킨다")
+    void emptyCustomDelimiter() {
+        assertSimpleTest(() ->
+                assertThatThrownBy(() -> runException("//\\n1:2,3"))
+                        .isInstanceOf(IllegalArgumentException.class)
+        );
+    }
+
+    @Test
+    @DisplayName("숫자 없이 구분자만 입력했을 경우 예외를 발생시킨다")
+    void onlyDelimitersInput() {
+        assertSimpleTest(() ->
+                assertThatThrownBy(() -> runException(",,:"))
+                        .isInstanceOf(IllegalArgumentException.class)
+        );
+    }
+
+    @Test
+    @DisplayName("커스텀 구분자로만 구성된 입력의 경우 예외를 발생시킨다")
+    void onlyCustomDelimitersInput() {
+        assertSimpleTest(() ->
+                assertThatThrownBy(() -> runException("//;\\n;;;"))
+                        .isInstanceOf(IllegalArgumentException.class)
+        );
+    }
+
+    @Test
+    @DisplayName("합이 숫자 범위를 초과하는 값이 나오면 예외를 발생시킨다")
+    void sumOverflow() {
+        assertSimpleTest(() ->
+                assertThatThrownBy(() -> runException("2147483647,1"))
+                        .isInstanceOf(IllegalArgumentException.class)
+        );
+    }
+
     @Override
     public void runMain() {
         Application.main(new String[]{});
