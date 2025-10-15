@@ -95,7 +95,7 @@
 -   [ ] 기존에 존재하는 연산자를 커스텀 구분자로 입력했다면 문제 없이 연산을 진행한다.
 -   [ ] 커스텀 구분자로 `.`는 금지한다.
     - 소수 연산 시, 어디까지가 소수이며, 연산자인지 구분이 모호해질 가능성이 있다.
--   [ ] 문자열 계산기에 음수를 전달하는 경우 `IllegalArgumentException` 예외를 발생시킨다.
+-   [x] 문자열 계산기에 음수를 전달하는 경우 `IllegalArgumentException` 예외를 발생시킨다.
 -   [ ] 문자열에 구분자가 아닌 문자가 포함되었을 경우 `IllegalArgumentException`을 발생시킨다.
 -   [ ] 입력에 숫자 범위를 초과하는 값이 나오면 `IllegalArgumentException`을 발생시킨다.
 -   [ ] 커스텀 구분자 지정 양식은 있지만, 중간에 아무 문자열도 없다면 `IllegalArgumentException`을 발생시킨다.

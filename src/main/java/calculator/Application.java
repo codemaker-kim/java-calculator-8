@@ -11,6 +11,7 @@ public class Application {
     public static void main(String[] args) {
         System.out.println("덧셈할 문자열을 입력해 주세요.");
         String input;
+
         try {
             input = Console.readLine();
         } catch (NoSuchElementException e) {
@@ -21,7 +22,6 @@ public class Application {
         System.out.println("결과 : " + result);
     }
 
-    // 객체 단위로 쪼개서 구현하기.
     private static int calculate(String input) {
         if (input == null || input.isEmpty()) {
             return 0;
@@ -32,7 +32,16 @@ public class Application {
         String[] targets = input.split(regex);
 
         return Arrays.stream(targets)
-                .mapToInt(Integer::parseInt)
+                .mapToInt(Application::isNegative)
                 .sum();
+    }
+
+    private static int isNegative(String s) {
+        int num = Integer.parseInt(s);
+        if (num < 0) {
+            throw new IllegalArgumentException("음수는 허용되지 않습니다: " + num);
+        }
+
+        return num;
     }
 }
