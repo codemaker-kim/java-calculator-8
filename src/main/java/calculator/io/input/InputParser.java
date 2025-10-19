@@ -26,13 +26,17 @@ public class InputParser {
     }
 
     private static List<Double> parseNumbers(String expressionPart, String regex) {
-        if (isNullOrEmpty(expressionPart)) {
+        if (InputValidator.isNullOrEmpty(expressionPart)) {
             return List.of();
         }
 
         String[] tokens = expressionPart.split(regex);
         InputValidator.validateNotOnlyDelimiters(tokens);
 
+        return convertToNumberList(tokens);
+    }
+
+    private static List<Double> convertToNumberList(String[] tokens) {
         return Arrays.stream(tokens)
                 .filter(token -> !token.isEmpty())
                 .map(InputParser::parseToDouble)
@@ -51,9 +55,5 @@ public class InputParser {
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(INVALID_NUMBER_FORMAT.getMessage() + token);
         }
-    }
-
-    private static boolean isNullOrEmpty(String expressionPart) {
-        return expressionPart == null || expressionPart.isEmpty();
     }
 }

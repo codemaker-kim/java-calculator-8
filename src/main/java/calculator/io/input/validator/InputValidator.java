@@ -13,6 +13,10 @@ public class InputValidator {
 
     private static final Pattern VALID_NUMBER_PATTERN = Pattern.compile("^\\d+(\\.\\d+)?$");
 
+    public static boolean isNullOrEmpty(String expressionPart) {
+        return expressionPart == null || expressionPart.isEmpty();
+    }
+
     public static void validatePositiveNumber(String number) {
         double value = Double.parseDouble(number);
 
