@@ -2,6 +2,7 @@ package calculator.calculator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.within;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.List;
@@ -13,50 +14,69 @@ class CalculatorTest {
     private Calculator calculator;
 
     @Test
-    @DisplayName("숫자 배열의 합 계산")
-    void calculateSum_WithValidNumbers_ReturnsSum() {
-        int result = calculatorInit(List.of(1, 2, 3))
+    @DisplayName("정수 배열의 합 계산")
+    void calculateSum_WithValidIntegers_ReturnsSum() {
+        double result = calculatorInit(List.of(1.0, 2.0, 3.0))
                 .calculate();
 
-        assertThat(6).isEqualTo(result);
+        assertThat(result).isEqualTo(6.0);
+    }
+
+    @Test
+    @DisplayName("소수 배열의 합 계산")
+    void calculateSum_WithValidDecimals_ReturnsSum() {
+        double result = calculatorInit(List.of(1.5, 2.3, 3.2))
+                .calculate();
+
+        assertThat(result).isEqualTo(7.0, within(0.0001));
     }
 
     @Test
     @DisplayName("빈 배열의 합은 0")
     void calculateSum_WithEmptyArray_ReturnsZero() {
-        int result = calculatorInit(List.of())
+        double result = calculatorInit(List.of())
                 .calculate();
 
-        assertThat(0).isEqualTo(result);
+        assertThat(result).isEqualTo(0.0);
     }
 
     @Test
     @DisplayName("단일 숫자의 합")
     void calculateSum_WithSingleNumber_ReturnsSingleNumber() {
-        int result = calculatorInit(List.of(5))
+        double result = calculatorInit(List.of(5.5))
                 .calculate();
 
-        assertThat(5).isEqualTo(result);
+        assertThat(result).isEqualTo(5.5);
     }
 
     @Test
-    @DisplayName("합계 결과 오버플로우 검증")
+    @DisplayName("매우 큰 숫자들의 합 계산")
+    void calculateSum_WithLargeNumbers_DoesNotThrow() {
+        Calculator calculator = calculatorInit(
+                List.of(Double.MAX_VALUE / 10, Double.MAX_VALUE / 10, Double.MAX_VALUE / 10));
+
+        assertDoesNotThrow(calculator::calculate);
+    }
+
+    @Test
+    @DisplayName("매우 작은 소수들의 합 계산")
+    void calculateSum_WithSmallDecimals_ReturnsSum() {
+        double result = calculatorInit(List.of(0.1, 0.2, 0.3))
+                .calculate();
+
+        assertThat(result).isEqualTo(0.6, within(0.0001));
+    }
+
+    @Test
+    @DisplayName("Double 오버플로우 시 예외 발생")
     void calculateSum_WithOverflow_ThrowsException() {
-        Calculator calculator = calculatorInit(List.of(Integer.MAX_VALUE, 1));
+        Calculator calculator = calculatorInit(List.of(Double.MAX_VALUE, Double.MAX_VALUE));
 
         assertThatThrownBy(calculator::calculate)
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
-    @Test
-    @DisplayName("오버플로우 검증 - 정상 범위")
-    void validateSumOverflow_WithValidSum_DoesNotThrow() {
-        Calculator calculator = calculatorInit(List.of(100, 200));
-
-        assertDoesNotThrow(calculator::calculate);
-    }
-
-    private Calculator calculatorInit(List<Integer> input) {
-        return new Calculator(input);
+    private Calculator calculatorInit(List<Double> numbers) {
+        return new Calculator(numbers);
     }
 }

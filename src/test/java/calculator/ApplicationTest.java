@@ -46,11 +46,20 @@ class ApplicationTest extends NsTest {
     }
 
     @Test
-    @DisplayName("숫자 하나만 들어올 경우 해당 숫자를 반환한다.")
+    @DisplayName("정수 하나만 들어올 경우 해당 숫자를 반환한다.")
     void inputOnlyOneNumber() {
         assertSimpleTest(() -> {
             run("12345");
             assertThat(output()).contains("결과 : 12345");
+        });
+    }
+
+    @Test
+    @DisplayName("소수 하나만 들어올 경우 해당 숫자를 반환한다.")
+    void inputOnlyOneDecimal() {
+        assertSimpleTest(() -> {
+            run("3.14");
+            assertThat(output()).contains("결과 : 3.14");
         });
     }
 
@@ -60,7 +69,9 @@ class ApplicationTest extends NsTest {
             value = {
                     "1,2,3,4&결과 : 10",
                     "5:6:7:8&결과 : 26",
-                    "10,20:30,40&결과 : 100"
+                    "10,20:30,40&결과 : 100",
+                    "1.5,2.5,3.0&결과 : 7",
+                    "10.5:20.3:30.2&결과 : 61"
             },
             delimiter = '&'
     )
@@ -68,6 +79,15 @@ class ApplicationTest extends NsTest {
         assertSimpleTest(() -> {
             run(input);
             assertThat(output()).contains(expected);
+        });
+    }
+
+    @Test
+    @DisplayName("소수점 계산 결과가 정수인 경우 정수로 출력된다.")
+    void decimalCalculationWithIntegerResult() {
+        assertSimpleTest(() -> {
+            run("1.5,2.5");
+            assertThat(output()).contains("결과 : 4");
         });
     }
 
@@ -85,7 +105,8 @@ class ApplicationTest extends NsTest {
     @CsvSource(
             value = {
                     "//:\\n1,2:3:4&결과 : 10",
-                    "//,\\n1,2:3:4&결과 : 10"
+                    "//,\\n1,2:3:4&결과 : 10",
+                    "//;\\n1.5;2.5;3.0&결과 : 7"
             },
             delimiter = '&'
     )
@@ -106,10 +127,10 @@ class ApplicationTest extends NsTest {
     }
 
     @Test
-    @DisplayName("입력에 숫자 범위를 초과하는 값이 나오면 예외를 발생시킨다")
+    @DisplayName("입력에 Double 범위를 초과하는 값이 나오면 예외를 발생시킨다")
     void inputOverflowNumber() {
         assertSimpleTest(() ->
-                assertThatThrownBy(() -> runException("2147483648,1,2"))
+                assertThatThrownBy(() -> runException("1e309,1,2"))
                         .isInstanceOf(IllegalArgumentException.class)
         );
     }
@@ -142,21 +163,48 @@ class ApplicationTest extends NsTest {
     }
 
     @Test
-    @DisplayName("합이 숫자 범위를 초과하는 값이 나오면 예외를 발생시킨다")
-    void sumOverflow() {
-        assertSimpleTest(() ->
-                assertThatThrownBy(() -> runException("2147483647,1"))
-                        .isInstanceOf(IllegalArgumentException.class)
-        );
-    }
-
-    @Test
     @DisplayName("올바른 커스텀 구분자 양식만 존재하고, 계산식이 없는 경우 0을 반환한다.")
     void hasOnlyDelimiters() {
         assertSimpleTest(() -> {
             run("//;\\n");
             assertThat(output()).contains("결과 : 0");
         });
+    }
+
+    @Test
+    @DisplayName("소수점만 있는 숫자 입력 시 예외 발생 (예: 1.)")
+    void inputTrailingDecimalPoint() {
+        assertSimpleTest(() ->
+                assertThatThrownBy(() -> runException("1."))
+                        .isInstanceOf(IllegalArgumentException.class)
+        );
+    }
+
+    @Test
+    @DisplayName("앞에 소수점만 있는 숫자 입력 시 예외 발생 (예: .5)")
+    void inputLeadingDecimalPoint() {
+        assertSimpleTest(() ->
+                assertThatThrownBy(() -> runException(".5"))
+                        .isInstanceOf(IllegalArgumentException.class)
+        );
+    }
+
+    @Test
+    @DisplayName("잘못된 소수점 형식들의 계산 시 예외 발생")
+    void calculateWithInvalidDecimalPoints() {
+        assertSimpleTest(() ->
+                assertThatThrownBy(() -> runException("1.,2.,3."))
+                        .isInstanceOf(IllegalArgumentException.class)
+        );
+    }
+
+    @Test
+    @DisplayName("앞에 소수점만 있는 숫자들의 계산 시 예외 발생")
+    void calculateWithLeadingDecimalPoints() {
+        assertSimpleTest(() ->
+                assertThatThrownBy(() -> runException(".1,.2,.3"))
+                        .isInstanceOf(IllegalArgumentException.class)
+        );
     }
 
     @Override
