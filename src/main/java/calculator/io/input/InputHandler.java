@@ -3,7 +3,7 @@ package calculator.io.input;
 import camp.nextstep.edu.missionutils.Console;
 import java.util.NoSuchElementException;
 
-public class Input {
+public class InputHandler {
 
     private static final String BLANK = "";
 
