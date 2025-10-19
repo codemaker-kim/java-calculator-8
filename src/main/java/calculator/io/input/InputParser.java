@@ -1,5 +1,7 @@
 package calculator.io.input;
 
+import static calculator.io.input.validator.InputErrorMessage.INVALID_NUMBER_FORMAT;
+
 import calculator.delimiter.DelimiterExtractor;
 import calculator.io.input.dto.CalculatorInput;
 import calculator.io.input.validator.InputValidator;
@@ -47,7 +49,7 @@ public class InputParser {
 
             return number;
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("숫자 형식이 올바르지 않습니다: " + token);
+            throw new IllegalArgumentException(INVALID_NUMBER_FORMAT.getMessage() + token);
         }
     }
 

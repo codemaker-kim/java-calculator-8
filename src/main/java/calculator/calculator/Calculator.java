@@ -1,5 +1,7 @@
 package calculator.calculator;
 
+import static calculator.calculator.CalculatorErrorMessage.SUM_OVERFLOW;
+
 import java.util.List;
 
 public class Calculator {
@@ -14,7 +16,7 @@ public class Calculator {
         return calculateSum(numbers);
     }
 
-    public int calculateSum(List<Integer> numbers) {
+    private int calculateSum(List<Integer> numbers) {
         int sum = 0;
         for (int number : numbers) {
             validateSumOverflow(sum, number);
@@ -24,9 +26,8 @@ public class Calculator {
     }
 
     private void validateSumOverflow(int currentSum, int numberToAdd) {
-        // 오버플로우 체크
         if (numberToAdd > 0 && currentSum > Integer.MAX_VALUE - numberToAdd) {
-            throw new IllegalArgumentException("합계가 숫자 범위를 초과했습니다.");
+            throw new IllegalArgumentException(SUM_OVERFLOW.getMessage());
         }
     }
 }
