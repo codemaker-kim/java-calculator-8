@@ -1,5 +1,10 @@
 package calculator.io.input.validator;
 
+import static calculator.io.input.validator.InputErrorMessage.NEGATIVE_NUMBER;
+import static calculator.io.input.validator.InputErrorMessage.NON_NUMERIC;
+import static calculator.io.input.validator.InputErrorMessage.NUMBER_OUT_OF_RANGE;
+import static calculator.io.input.validator.InputErrorMessage.ONLY_DELIMITERS;
+
 import java.util.Arrays;
 
 public class InputValidator {
@@ -7,7 +12,7 @@ public class InputValidator {
     public static void validatePositiveNumber(String number) {
         int value = Integer.parseInt(number);
         if (value < 0) {
-            throw new IllegalArgumentException("음수는 입력할 수 없습니다.");
+            throw new IllegalArgumentException(NEGATIVE_NUMBER.getMessage());
         }
     }
 
@@ -15,7 +20,7 @@ public class InputValidator {
         try {
             Integer.parseInt(input);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("숫자가 아닌 문자가 포함되어 있습니다.");
+            throw new IllegalArgumentException(NON_NUMERIC.getMessage());
         }
     }
 
@@ -23,7 +28,7 @@ public class InputValidator {
         try {
             Integer.parseInt(number);
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("숫자 범위를 초과했습니다.");
+            throw new IllegalArgumentException(NUMBER_OUT_OF_RANGE.getMessage());
         }
     }
 
@@ -32,7 +37,7 @@ public class InputValidator {
                 .anyMatch(token -> !token.isEmpty());
 
         if (!hasValidNumber) {
-            throw new IllegalArgumentException("구분자만 있고 숫자가 없습니다.");
+            throw new IllegalArgumentException(ONLY_DELIMITERS.getMessage());
         }
     }
 }
