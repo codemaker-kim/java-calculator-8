@@ -1,19 +1,17 @@
 package calculator.io.input;
 
-import static java.math.BigDecimal.ZERO;
+import camp.nextstep.edu.missionutils.Console;
+import java.util.NoSuchElementException;
 
 public class Input {
-    private final String value;
 
-    public Input(String value) {
-        this.value = value;
-    }
+    private static final String BLANK = "";
 
-    public String getValue() {
-        return isNullOrEmpty() ? ZERO.toString() : value;
-    }
-
-    private boolean isNullOrEmpty() {
-        return this.value == null || this.value.isEmpty();
+    public static String getInput() {
+        try {
+            return Console.readLine();
+        } catch (NoSuchElementException e) {
+            return BLANK;
+        }
     }
 }

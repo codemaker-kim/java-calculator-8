@@ -2,23 +2,19 @@ package calculator;
 
 import calculator.calculator.Calculator;
 import calculator.io.input.Input;
+import calculator.io.input.InputParser;
+import calculator.io.input.dto.CalculatorInput;
 import calculator.io.output.OutputFormatter;
-import camp.nextstep.edu.missionutils.Console;
-import java.util.NoSuchElementException;
 
 public class Application {
 
     public static void main(String[] args) {
         OutputFormatter.printInputPrompt();
-        Input input;
+        String input = Input.getInput();
 
-        try {
-            input = new Input(Console.readLine());
-        } catch (NoSuchElementException e) {
-            input = new Input("");
-        }
+        CalculatorInput calculatorInput = InputParser.toCalculatorInput(input);
+        Calculator calculator = new Calculator(calculatorInput.numbers());
 
-        Calculator calculator = new Calculator(input);
         int result = calculator.calculate();
 
         OutputFormatter.printResult(result);

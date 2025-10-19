@@ -7,10 +7,10 @@ public class InputExtractor {
     private static final String CUSTOM_DELIMITER_PREFIX = "//";
     private static final String CUSTOM_DELIMITER_SUFFIX = "\\n";
 
-    public static String getCustomDelimiterPart(final String target) {
+    public static String getDelimiterPart(final String target) {
         if (hasCustomDelimiter(target)) {
-            return target.substring(ZERO.intValue(),
-                    target.indexOf(CUSTOM_DELIMITER_SUFFIX) + CUSTOM_DELIMITER_SUFFIX.length());
+            int endIndex = getDelimiterPartEndIndex(target);
+            return target.substring(ZERO.intValue(), endIndex);
         }
 
         return null;
@@ -18,7 +18,8 @@ public class InputExtractor {
 
     public static String getExpressionPart(final String target) {
         if (hasCustomDelimiter(target)) {
-            return target.substring(target.lastIndexOf(CUSTOM_DELIMITER_SUFFIX) + CUSTOM_DELIMITER_SUFFIX.length());
+            int startIndex = getExpressionPartStartIndex(target);
+            return target.substring(startIndex);
         }
 
         return target;
@@ -27,5 +28,15 @@ public class InputExtractor {
     private static boolean hasCustomDelimiter(String target) {
         return target.startsWith(CUSTOM_DELIMITER_PREFIX) &&
                 target.contains(CUSTOM_DELIMITER_SUFFIX);
+    }
+
+    private static int getDelimiterPartEndIndex(String target) {
+        return target.indexOf(CUSTOM_DELIMITER_SUFFIX) +
+                CUSTOM_DELIMITER_SUFFIX.length();
+    }
+
+    private static int getExpressionPartStartIndex(String target) {
+        return target.lastIndexOf(CUSTOM_DELIMITER_SUFFIX) +
+                CUSTOM_DELIMITER_SUFFIX.length();
     }
 }
