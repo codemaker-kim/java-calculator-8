@@ -150,6 +150,15 @@ class ApplicationTest extends NsTest {
         );
     }
 
+    @Test
+    @DisplayName("올바른 커스텀 구분자 양식만 존재하고, 계산식이 없는 경우 0을 반환한다.")
+    void hasOnlyDelimiters() {
+        assertSimpleTest(() -> {
+            run("//;\\n");
+            assertThat(output()).contains("결과 : 0");
+        });
+    }
+
     @Override
     public void runMain() {
         Application.main(new String[]{});
