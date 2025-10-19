@@ -15,7 +15,7 @@ public class Application {
         CalculatorInput calculatorInput = InputParser.toCalculatorInput(input);
         Calculator calculator = new Calculator(calculatorInput.numbers());
 
-        int result = calculator.calculate();
+        double result = calculator.calculate();
 
         OutputFormatter.printResult(result);
     }

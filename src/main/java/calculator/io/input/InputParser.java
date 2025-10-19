@@ -14,18 +14,18 @@ public class InputParser {
         String delimiterPart = InputExtractor.getDelimiterPart(input);
         String expressionPart = InputExtractor.getExpressionPart(input);
 
-        List<Integer> numbers = getNumbers(delimiterPart, expressionPart);
+        List<Double> numbers = getNumbers(delimiterPart, expressionPart);
 
         return new CalculatorInput(numbers);
     }
 
-    private static List<Integer> getNumbers(String delimiterPart, String expressionPart) {
+    private static List<Double> getNumbers(String delimiterPart, String expressionPart) {
         String regex = DelimiterExtractor.getRegex(delimiterPart);
 
         return parseNumbers(expressionPart, regex);
     }
 
-    private static List<Integer> parseNumbers(String expressionPart, String regex) {
+    private static List<Double> parseNumbers(String expressionPart, String regex) {
         if (isNullOrEmpty(expressionPart)) {
             return List.of();
         }
@@ -35,16 +35,16 @@ public class InputParser {
 
         return Arrays.stream(tokens)
                 .filter(token -> !token.isEmpty())
-                .map(InputParser::parseToInt)
+                .map(InputParser::parseToDouble)
                 .toList();
     }
 
-    private static int parseToInt(String token) {
+    private static Double parseToDouble(String token) {
         try {
             InputValidator.validateNumeric(token);
             InputValidator.validateNumberRange(token);
 
-            int number = Integer.parseInt(token);
+            double number = Double.parseDouble(token);
             InputValidator.validatePositiveNumber(token);
 
             return number;
