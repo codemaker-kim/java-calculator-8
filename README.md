@@ -48,45 +48,47 @@
 
 ## ✅ 기능 목록
 
-**커스텀 구분자 확인(`DelimiterExtractor`)**
+**구분자 처리(`delimiter` 패키지)**
 
-- [x] 기본 구분자(쉼표, 콜론) 식별
-- [x] 커스텀 구분자 패턴(// ~ \n) 감지
-- [x] 커스텀 구분자 추출
-- [x] 구분자가 없는 경우 처리
-- [x] 금지된 구분자(.) 검증
+- [x] 기본 구분자(쉼표, 콜론) 식별 (`DelimiterExtractor`)
+- [x] 커스텀 구분자 패턴(// ~ \n) 감지 (`DelimiterExtractor`)
+- [x] 커스텀 구분자 추출 (`DelimiterExtractor`)
+- [x] 구분자가 없는 경우 처리 (`DelimiterExtractor`)
+- [x] 금지된 구분자(.) 검증 (`DelimiterValidator`)
+- [x] 커스텀 구분자 양식 검증 (`DelimiterValidator`)
+- [x] 구분자 에러 메시지 관리 (`DelimiterErrorMessage`)
 
-**커스텀 구분자 검증(`DelimiterValidator`)**
+**입력 처리(`io.input` 패키지)**
 
-- [x] 커스텀 구분자 양식 검증
+- [x] 커스텀 구분자 파트와 계산식 파트로 분할 (`InputExtractor`)
+- [x] 문자열을 구분자로 분리 (`InputParser`)
+- [x] 각 토큰을 숫자로 변환 (`InputParser`)
+- [x] 파싱 실패 시 예외 처리 (`InputParser`)
+- [x] 계산기 입력 데이터 객체 (`CalculatorInput`)
+- [x] 콘솔 입력 처리 (`Input`)
 
-**입력 분할(`InputExtractor`)**
+**입력 검증(`io.input.validator` 패키지)**
 
-- [x] 커스텀 구분자 파트와 계산식 파트로 분할
+- [x] 음수 입력 검증 (`InputValidator`)
+- [x] 숫자가 아닌 문자 검증 (`InputValidator`)
+- [x] 숫자 범위 초과 검증 (`InputValidator`)
+- [x] 구분자만 있는지 검증 (`InputValidator`)
+- [x] 입력 에러 메시지 관리 (`InputErrorMessage`)
 
-**계산식 검증(`ExpressionValidator`)**
+**계산 처리(`calculator` 패키지)**
 
-- [x] 음수 입력 검증
-- [x] 숫자가 아닌 문자 검증
-- [x] 숫자 범위 초과 검증
-- [x] 빈 입력인지 검증
-- [x] 구분자만 있는지 검증
+- [x] 숫자 배열의 합 계산 (`Calculator`)
+- [x] 합계 결과 오버플로우 검증 (`Calculator`)
+- [x] 계산 에러 메시지 관리 (`CalculatorErrorMessage`)
 
-**계산식 파싱(`ExpressionParser`)**
+**출력 처리(`io.output` 패키지)**
 
-- [x] 문자열을 구분자로 분리
-- [x] 각 토큰을 숫자로 변환
-- [x] 파싱 실패 시 예외 처리
+- [x] 결과 출력 형식 지정 (`OutputFormatter`)
+- [x] 계산 결과 반환 (`OutputFormatter`)
 
-**덧셈 진행(`Calculator`)**
+**애플리케이션 진입점**
 
-- [x] 숫자 배열의 합 계산
-- [x] 합계 결과 오버플로우 검증
-
-**결과 출력(`OutputFormatter`)**
-
-- [x] 결과 출력 형식 지정
-- [x] 계산 결과 반환
+- [x] 프로그램 시작점 (`Application`)
 
 ---
 
